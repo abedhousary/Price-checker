@@ -38,8 +38,7 @@ class pricechecker :
         root.mainloop()
     def lookupprice (self,event) :
 
-
-        self.cr.execute(f"select pricesell from {self.configfile['table']} where code = {self.barcodeentry.get()}")
+        self.cr.execute(f"select {self.configfile['pricefield']} from {self.configfile['table']} where code = {self.barcodeentry.get()}")
         self.price.config(text = f"{self.cr.fetchall()[0][0]} L.L",fg = "green")
     def configwindows(self):
         def save ():
@@ -47,12 +46,13 @@ class pricechecker :
                 olddata = json.load(f)
                 olddata['database'] = Databaseentry.get()
                 olddata['table'] = tableeentry.get()
+                olddata['pricefield'] = priceroweentry.get()
             with open("app.json","w") as n :
                 newdata =  json.dumps(olddata)
                 n.write(newdata)
         win2 = Tk()
         width = 500 
-        height = 200 
+        height = 250 
         sw = win2.winfo_screenwidth()
         sh = win2.winfo_screenheight()
         x = (sw / 2) - (width / 2)
@@ -61,14 +61,17 @@ class pricechecker :
 
         DatabaseName = Label(win2,text = "Database Name here").grid(row =0 ,column=0,padx=20,pady=30)
         TableName = Label(win2,text = "Table Name here").grid(row =1 ,column=0,padx=20,pady=30)
+        rowName = Label(win2,text = "Price field Name here").grid(row =2 ,column=0,padx=20,pady=30)
 
         Databaseentry = Entry(win2)
         tableeentry = Entry(win2)
+        priceroweentry = Entry(win2)
 
         savebutton = Button(win2,text = "Save",width=9,command=save)
 
         Databaseentry.grid(row =0,column=1,padx=20,pady=30)
         tableeentry.grid(row =1 ,column=1,padx=20,pady=30)
+        priceroweentry.grid(row =2 ,column=1,padx=20,pady=30)
 
         savebutton.grid(row =0 ,column=2,padx=20,pady=30)
 
